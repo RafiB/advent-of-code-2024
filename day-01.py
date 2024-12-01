@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 TEST_INPUT = """3   4
 4   3
 2   5
@@ -1009,23 +1011,20 @@ PUZZLE_INPUT = """62619   25903
 
 def solve(puzzle_input):
     l = []
-    r = []
+    r = defaultdict(int)
 
     for line in puzzle_input.split("\n"):
         s = line.split()
         l.append(int(s[0]))
-        r.append(int(s[-1]))
+        r[int(s[-1])] += 1
 
-    l = sorted(l)
-    r = sorted(r)
+    similarity = 0
+    for l_i in l:
+        similarity += l_i * r.get(l_i, 0)
 
-    distance = 0
-    for i, l_i in enumerate(l):
-        distance += abs(l_i - r[i])
-
-    return distance
+    return similarity
 
 
 if __name__ == "__main__":
-    assert solve(TEST_INPUT) == 11
+    assert solve(TEST_INPUT) == 31
     print(solve(PUZZLE_INPUT))
