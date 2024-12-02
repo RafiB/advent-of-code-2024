@@ -1010,38 +1010,42 @@ def solve(puzzle_input):
     num_safe = 0
 
     for report in puzzle_input.split("\n"):
-        levels = [int(x) for x in report.split()]
-        increasing = levels[0] < levels[1]
+        levelsA = [int(x) for x in report.split()]
 
-        safe = True
+        for i in range(len(levelsA)):
+            levels = levelsA[:i] + levelsA[i+1:]
+            increasing = levels[0] < levels[1]
 
-        for i in range(1, len(levels)):
-            if increasing:
-                if levels[i] < levels[i-1]:
-                    safe = False
-                    break
+            safe = True
 
-                delta = levels[i] - levels[i-1]
-                if delta < 1 or delta > 3:
-                    safe = False
-                    break
-            else:
-                if levels[i] > levels[i-1]:
-                    safe = False
-                    break
+            for i in range(1, len(levels)):
+                if increasing:
+                    if levels[i] < levels[i-1]:
+                        safe = False
+                        break
 
-                delta = levels[i-1] - levels[i]
-                if delta < 1 or delta > 3:
-                    safe = False
-                    break
+                    delta = levels[i] - levels[i-1]
+                    if delta < 1 or delta > 3:
+                        safe = False
+                        break
+                else:
+                    if levels[i] > levels[i-1]:
+                        safe = False
+                        break
 
-        if safe:
-            num_safe += 1
+                    delta = levels[i-1] - levels[i]
+                    if delta < 1 or delta > 3:
+                        safe = False
+                        break
+
+            if safe:
+                num_safe += 1
+                break
 
     return num_safe
 
 
 
 if __name__ == "__main__":
-    assert solve(TEST_INPUT) == 2
+    assert solve(TEST_INPUT) == 4
     print(solve(PUZZLE_INPUT))
